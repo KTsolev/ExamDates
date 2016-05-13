@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Results";
+}
+
+<h2>Results</h2>
+@if (ViewBag.Exams != null)
+{
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Firs Date</th>
+            <th>Second Date</th>
+            <th>Overlaps</th>
+        </tr>
+        @foreach (ExamDates.Models.ExamModel item in ViewBag.Exams)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SecondDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Overlap)
+                </td>
+            </tr>
+        }
+    </table>
+}
+

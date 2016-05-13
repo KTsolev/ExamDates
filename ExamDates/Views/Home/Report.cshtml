@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+}
+
+<h2>Report</h2>
+@{if(ViewBag.FileName!= null)
+  {
+      <p>Your file: @ViewBag.FIleName was uploaded correctly!!!</p>
+  }
+  else 
+  {
+      <p>Oooppps!!! something went wrong</p>
+  }
+  
+}
+    <p>To see results click below:</p>
+  @using (Html.BeginForm("Result", "Home"))
+  {
+    <input type="hidden" name="FileName" value="@ViewBag.FileName" />
+    <input type="submit" />
+  }
+

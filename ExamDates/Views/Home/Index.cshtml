@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "HomeView";
+}
+
+<h2>HomeView</h2>
+<p>Load xml file here</p>
+<p name="error"></p>
+@using(Html.BeginForm("Report","Home"))
+{
+    <input type="file" name="FileName"/>
+    <input type="submit" name="Submit"/>
+}
+<div id="file-content"></div>
+@if(ViewBag.Error != null)
+{
+    <div><p style="color:red">@ViewBag.Error</p></div>
+}
+<script>
+        $("input[name$='FileName']").change(function () {
+            var input = $("input[name$='FileName']").val();
+            console.log(input);
+            var extend = input.split(".")
+            console.log(extend);
+            if ((extend[1] === "xls" || extend[1] === "xlsx") && extend[1] !== undefined) {
+                $("input[name$='Submit']").show();
+                $("p[name$='error']").html("Your file is OK.");
+                $("p[name$='error']").css("color","green");
+            }
+            else {
+                $("input[name$='Submit']").hide();
+                $("p[name$='error']").html("Your gave wrong file!Please select excel file!");
+                $("p[name$='error']").css("color","red");
+            }
+        });
+</script>
