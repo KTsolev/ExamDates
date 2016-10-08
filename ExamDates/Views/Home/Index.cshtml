@@ -1,36 +1,31 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "HomeView";
 }
-
 <h2>HomeView</h2>
 <p>Load xml file here</p>
 <p name="error"></p>
-@using(Html.BeginForm("Report","Home"))
+@using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <input type="file" name="FileName"/>
-    <input type="submit" name="Submit"/>
+    <input type="file" name="FileUpload" />
+    <input type="submit" name="Submit" id="Submit" value="Upload" />
 }
 <div id="file-content"></div>
-@if(ViewBag.Error != null)
-{
-    <div><p style="color:red">@ViewBag.Error</p></div>
-}
+<div id="error"><p></p></div>
+<div id="success"><p></p></div>
 <script>
-        $("input[name$='FileName']").change(function () {
-            var input = $("input[name$='FileName']").val();
-            console.log(input);
-            var extend = input.split(".")
-            console.log(extend);
-            if ((extend[1] === "xls" || extend[1] === "xlsx") && extend[1] !== undefined) {
-                $("input[name$='Submit']").show();
-                $("p[name$='error']").html("Your file is OK.");
-                $("p[name$='error']").css("color","green");
-            }
-            else {
-                $("input[name$='Submit']").hide();
-                $("p[name$='error']").html("Your gave wrong file!Please select excel file!");
-                $("p[name$='error']").css("color","red");
-            }
-        });
+    var res = "@ViewBag.report";
+    if (res == "File uploaded successfully")
+    {
+        $("#success").text(res);
+        $("#success").css(
+            { "color": "green" },
+            { "size": "10px" });
+    }
+    else
+    {
+        $("#error").text(res);
+        $("#error").css(
+            { "color": "red" },
+            { "size": "10px" });
+    }
 </script>

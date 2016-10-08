@@ -10,7 +10,12 @@
         <tr>
             <th>Course Name</th>
             <th>Firs Date</th>
+            <th>Start Registration Date</th>
+            <th>End Registration Date</th>
             <th>Second Date</th>
+            <th>Start Registration Date</th>
+            <th>End Registration Date</th>
+            <th>Sesion</th>
             <th>Overlaps</th>
         </tr>
         @foreach (ExamDates.Models.ExamModel item in ViewBag.Exams)
@@ -23,7 +28,22 @@
                     @Html.DisplayFor(modelItem => item.FirstDate)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.RegPerFirstDate.RegStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegPerFirstDate.RegEndDate)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.SecondDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegPerSecondDate.RegStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegPerSecondDate.RegEndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Session)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Overlap)
@@ -32,4 +52,101 @@
         }
     </table>
 }
+<script>
+    var tds = [];
+    var sametds = [];
+    var splits1 = [];
+    var splits2 = [];
+    var colors = ["#fcc630", "#fc8c30", "#a7fc30", "#30fce8", "#304bfc", "#fc30f9", "#fc306d"];
+    var usedIndexes = [];
+    $(document).ready(function () {
+            $("table").find("tr").each(function(){
+            if (Date.parse($(this).find("td:eq(1)").text()) !== undefined || Date.parse($(this).find("td:eq(2)").text()) !== undefined)
+            {
+                splits1 = $(this).find("td:eq(1)").text().split(" ");
+                splits2 = $(this).find("td:eq(4)").text().split(" ");
+                $(this).find("td:eq(1)").text(splits1[20]);
+                $(this).find("td:eq(2)").text(splits2[20]);
+                tds.push(splits1[20]);
+                tds.push(splits2[20]);
+            }
+            console.log($(this).html());
+            if ($(this).html().toString().startsWith("<th>") || $(this).html().toString().endsWith("</th>"))
+            {
+                $(this).css(
+                  {'text-align':'center'},
+                  { 'background-color': '#000' },
+                  { 'color': '#fff' },
+                  {'vertical-align': 'middle'},
+                  {'padding': '10px'});
+            }
+            });
+    });
+    $('table').ready(function () {
+        for (var i = tds.length - 1; i >= 0; i--) {
+            if (tds[i] === undefined) {
+                tds.splice(i, 1);
+            }
+        }
+        tds.sort();
+        for (var i = 0; i < tds.length - 1; i++) {
+            var date1 = tds[i];
+            var date2 = tds[i + 1];
+            if (date1 === date2) {
+                sametds.push(tds[i]);
+            }
+        }
+        tds = $("table").find("tbody tr td");
+        for (var j = 0; j < sametds.length; j++) {
+            var index = RandomIntFromInterval(0, colors.length - 1);
+            usedIndexes.push(index);
+            if (CheckIfUsedRandomInterval(index))
+            {
+                index = RandomIntFromInterval(0, colors.length - 1);
+            }
+            $("table").find("tbody tr").each(function () {
+                if ($(this).find("td:eq(1)").text() == sametds[j]) {
+                    $(this).find("td:eq(1)").css("backgroundColor", colors[index]);
+                    $(this).find("td:eq(8)").html(true);
+                }
+                if ($(this).find("td:eq(4)").text() == sametds[j]) {
+                    $(this).find("td:eq(4)").css("backgroundColor", colors[index]);
+                    $(this).find("td:eq(8)").html(true);
+                }
+                console.log($(this).text());
+                if ($(this).text() == "S")
+                {
+                    $(this).text("Summer");
+                }
+                if ($(this).text() == "W")
+                {
+                    $(this).text("Winter");
+                }
+                $(this).css(
+                    {'text-align':'center'},
+                    {'vertical-align': 'middle'},
+                    {'padding': '10px'});
+            });
+        }
+
+    });
+    function RandomIntFromInterval(min, max)
+    {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    function CheckIfUsedRandomInterval(index)
+    {
+        if (usedIndexes.length == 0 || usedIndexes.length == 1)
+            return;
+        for (var i = 0; i < usedIndexes.length; i++)
+        {
+            if (index === usedIndexes[i])
+            {
+                return false;
+            }
+        }
+        return true; 
+    }
+
+</script>
 
